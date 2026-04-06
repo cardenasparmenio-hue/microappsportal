@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useLang } from '@/components/i18n/LanguageProvider';
-import { GlassCard } from '@/components/ui/GlassCard';
-import { GlowButton } from '@/components/ui/GlowButton';
-import { createClient } from '@/lib/supabase/client';
+import { GlassCard } from '@/lib/components/ui/GlassCard';
+import { GlowButton } from '@/lib/components/ui/GlowButton';
+import { createClient } from '@/lib/supabase';
 
 export default function WelcomePage() {
   const router = useRouter();
