@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { GlassCard } from '@/lib/components/ui/GlassCard';
-import { GlowButton } from '@/lib/components/ui/GlowButton';
+import { GlassCard } from '@/components/ui/Glasscard';
+import { GlowButton } from '@/components/ui/GlowButton';
 import { createClient } from '@/lib/supabase';
 
 export default function WelcomePage() {
