@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import { useState, useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import { useLang } from '@/components/i18n/LanguageProvider';
-import { GlassCard } from '@/lib/components/ui/GlassCard';
-import { Input } from '@/lib/components/ui/Input';
-import { GlowButton } from '@/lib/components/ui/GlowButton';
-import { useToast } from '@/components/ui/Toast';
-import { Mail, Lock, CircuitBoard } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import { useState } from "react"
+
+import { GlassCard } from "@/lib/components/ui/GlassCard"
+import { GlowButton } from "@/lib/components/ui/GlowButton"
+import { Input } from "@/lib/components/ui/Input"
+import { useTranslation } from "@/hooks/useTranslation"
+import { useToast } from "@/lib/components/ui/ToastProvider"
+import { Mail, Lock } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 function LoginForm() {
   const router = useRouter();
