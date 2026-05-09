@@ -11,95 +11,91 @@ import { Mail, Lock } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
-function LoginForm() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { t } = useLang();
-  const { toast } = useToast();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const supabase = createClient();
-
-  useEffect(() => {
-    if (searchParams.get('verified')) {
-      toast(t('login.success'), 'success');
-    }
-    if (searchParams.get('error')) {
-      toast("Error: " + searchParams.get('error'), 'error');
-    }
-  }, [searchParams, t, toast]);
-
+export default function LoginPage() {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const { language } = useTranslation()
+  const toast = useToast()
+  const router = useRouter()
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+    e.preventDefault()
+    setLoading(true)
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
 
-    if (error) {
-      toast(error.message, 'error');
-      setIsLoading(false);
+
+    await new Promise(resolve => setTimeout(resolve, 800))
+
+    if (email && password.length >= 6) {
+      localStorage.setItem("mock_user", JSON.stringify({ email }))
+      router.push("/dashboard")
+      router.refresh()
     } else {
-      router.push('/');
-      router.refresh();
+      toast({
+        title: language === "es" ? "Error al iniciar sesión" : "Login error",
+        message: language === "es" ? "Credenciales inválidas (la contraseña debe tener al menos 6 caracteres)" : "Invalid credentials",
+        type: "error",
+      })
     }
-  };
+
+    setLoading(false)
+  }
 
   return (
     <GlassCard>
-      <div className="flex flex-col items-center mb-8">
-        <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary via-accent-pink to-accent-warm shadow-[0_0_20px_rgba(124,58,237,0.5)] flex items-center justify-center mb-4">
-          <CircuitBoard className="w-8 h-8 text-white" />
-        </div>
-        <h1 className="text-2xl font-bold text-gradient text-center">{t('app.name')}</h1>
-        <p className="text-sm text-base-content/70 mt-1">{t('app.tagline')}</p>
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-bold text-white tracking-tight">
+          {language === "es" ? "Bienvenido" : "Welcome Back"}
+        </h1>
+        <p className="mt-2 text-sm text-zinc-400">
+          {language === "es"
+            ? "Inicia sesión para acceder al portal"
+            : "Sign in to access the portal"}
+        </p>
       </div>
 
       <form onSubmit={handleLogin} className="space-y-4">
-        <Input 
-          type="email" 
-          placeholder={t('email')} 
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          icon={Mail} 
-          required 
-        />
-        <Input 
-          type="password" 
-          placeholder={t('password')} 
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          icon={Lock} 
-          required 
-        />
-        
-        <div className="flex justify-end pt-2 pb-4">
-          <Link href="/forgot-password" className="text-xs text-accent-blue hover:text-white transition-colors">
-            {t('login.forgot')}
+        <div>
+          <Input
+            type="email"
+            placeholder={language === "es" ? "Correo electrónico" : "Email address"}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            icon={<Mail className="h-5 w-5" />}
+          />
+        </div>
+        <div>
+          <Input
+            type="password"
+            placeholder={language === "es" ? "Contraseña" : "Password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            icon={<Lock className="h-5 w-5" />}
+          />
+        </div>
+
+        <div className="flex items-center justify-end">
+          <Link
+            href="/forgot-password"
+            className="text-xs font-medium text-blue-400 hover:text-blue-300"
+          >
+            {language === "es" ? "¿Olvidaste tu contraseña?" : "Forgot password?"}
           </Link>
         </div>
 
-        <GlowButton type="submit" isLoading={isLoading}>
-          {t('login.button')}
+        <GlowButton type="submit" className="w-full" isLoading={loading}>
+          {language === "es" ? "Iniciar sesión" : "Sign in"}
         </GlowButton>
       </form>
 
-      <div className="mt-8 text-center border-t border-white/10 pt-6">
-        <Link href="/signup" className="text-sm text-base-content/80 hover:text-white transition-colors">
-          {t('login.signup')}
+      <div className="mt-6 text-center text-sm text-zinc-400">
+        {language === "es" ? "¿No tienes cuenta? " : "Don't have an account? "}
+        <Link href="/signup" className="font-semibold text-white hover:underline">
+          {language === "es" ? "Regístrate" : "Sign up"}
         </Link>
       </div>
     </GlassCard>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense>
-      <LoginForm />
-    </Suspense>
   )
 }
