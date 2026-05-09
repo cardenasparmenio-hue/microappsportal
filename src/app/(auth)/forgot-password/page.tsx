@@ -1,80 +1,81 @@
-"use client";
+"use client"
 
-import { useState, Suspense } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { useLang } from '@/components/i18n/LanguageProvider';
-import { GlassCard } from '@/lib/components/ui/GlassCard';
-import { Input } from '@/lib/components/ui/Input';
-import { GlowButton } from '@/lib/components/ui/GlowButton';
-import { useToast } from '@/components/ui/Toast';
-import { Mail, CircuitBoard } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import { useState } from "react"
 
-function ForgotPasswordForm() {
-  const router = useRouter();
-  const { t } = useLang();
-  const { toast } = useToast();
-  const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const supabase = createClient();
+import { GlassCard } from "@/lib/components/ui/GlassCard"
+import { GlowButton } from "@/lib/components/ui/GlowButton"
+import { Input } from "@/lib/components/ui/Input"
+import { useTranslation } from "@/hooks/useTranslation"
+import { useToast } from "@/lib/components/ui/ToastProvider"
+import { Mail, ArrowLeft } from "lucide-react"
+import Link from "next/link"
+
+export default function ForgotPasswordPage() {
+  const [email, setEmail] = useState("")
+  const [loading, setLoading] = useState(false)
+  const { language } = useTranslation()
+  const toast = useToast()
 
   const handleReset = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+    e.preventDefault()
+    setLoading(true)
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
-    });
+    
+    await new Promise(resolve => setTimeout(resolve, 800))
 
-    if (error) {
-      toast(error.message, 'error');
-      setIsLoading(false);
+    if (email) {
+      toast({
+        title: language === "es" ? "Correo enviado" : "Email sent",
+        message: language === "es" ? "Revisa tu bandeja de entrada (Simulado)" : "Check your inbox (Mocked)",
+        type: "success",
+      })
     } else {
-      toast(t('forgot.success'), 'success');
-      router.push('/login');
+      toast({
+        title: language === "es" ? "Error" : "Error",
+        message: language === "es" ? "Ingresa un correo válido" : "Enter a valid email",
+        type: "error",
+      })
     }
-  };
+
+    setLoading(false)
+  }
 
   return (
     <GlassCard>
-      <div className="flex flex-col items-center mb-6">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-primary via-accent-pink to-accent-warm shadow-[0_0_15px_rgba(124,58,237,0.4)] flex items-center justify-center mb-3">
-          <CircuitBoard className="w-6 h-6 text-white" />
-        </div>
-        <h1 className="text-xl font-bold text-gradient text-center">{t('forgot.title')}</h1>
+      <div className="mb-8 text-center">
+        <h1 className="text-2xl font-bold text-white tracking-tight">
+          {language === "es" ? "Recuperar Contraseña" : "Reset Password"}
+        </h1>
+        <p className="mt-2 text-sm text-zinc-400">
+          {language === "es"
+            ? "Ingresa tu correo para recibir un enlace de recuperación"
+            : "Enter your email to receive a reset link"}
+        </p>
       </div>
 
       <form onSubmit={handleReset} className="space-y-4">
-        <Input 
-          type="email" 
-          placeholder={t('email')} 
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          icon={Mail} 
-          required 
-        />
-        
-        <div className="pt-2">
-          <GlowButton type="submit" isLoading={isLoading}>
-            {t('forgot.button')}
-          </GlowButton>
+        <div>
+          <Input
+            type="email"
+            placeholder={language === "es" ? "Correo electrónico" : "Email address"}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            icon={<Mail className="h-5 w-5" />}
+          />
         </div>
+
+        <GlowButton type="submit" className="w-full" isLoading={loading}>
+          {language === "es" ? "Enviar enlace" : "Send link"}
+        </GlowButton>
       </form>
 
-      <div className="mt-6 text-center border-t border-white/10 pt-6">
-        <Link href="/login" className="text-sm text-base-content/80 hover:text-white transition-colors">
-          {t('forgot.back')}
+      <div className="mt-6 text-center text-sm">
+        <Link href="/login" className="inline-flex items-center text-zinc-400 hover:text-white transition-colors">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          {language === "es" ? "Volver al login" : "Back to login"}
         </Link>
       </div>
     </GlassCard>
-  );
-}
-
-export default function ForgotPasswordPage() {
-  return (
-    <Suspense>
-      <ForgotPasswordForm />
-    </Suspense>
   )
 }
