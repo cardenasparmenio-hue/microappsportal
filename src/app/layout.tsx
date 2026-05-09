@@ -1,43 +1,30 @@
-import type { Metadata } from "next";
+import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import "./globals.css";
+import "./globals.css"
 import { LanguageProvider } from "@/context/LanguageContext"
 import { ToastProvider } from "@/lib/components/ui/ToastProvider"
 
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Micro-Apps Portal",
-  description: "Tu portal de micro aplicaciones",
-};
+  description: "Portal for Micro-Apps",
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <html
-      lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
+    <html lang="en">
+      <body className={`${inter.className} bg-black text-white antialiased min-h-screen`}>
         <LanguageProvider>
           <ToastProvider>
-            <LanguageSwitcher />
             {children}
           </ToastProvider>
         </LanguageProvider>
       </body>
     </html>
-  );
+  )
 }
