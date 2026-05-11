@@ -6,7 +6,7 @@ import  GlassCard  from "@/lib/components/ui/GlassCard"
 import  GlowButton  from "@/lib/components/ui/GlowButton"
 import { Input } from "@/lib/components/ui/Input"
 import { useTranslation } from "@/hooks/useTranslation"
-import { useToast } from "@/lib/components/ui/ToastProvider"
+
 import { Mail, Lock } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -16,7 +16,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const { language } = useTranslation()
-  const toast = useToast()
+  
   const router = useRouter()
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
