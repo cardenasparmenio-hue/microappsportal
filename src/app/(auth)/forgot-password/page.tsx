@@ -1,3 +1,26 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 "use client"
 
 import { useState } from "react"
@@ -6,7 +29,7 @@ import  GlassCard  from "@/lib/components/ui/GlassCard"
 import  GlowButton  from "@/lib/components/ui/GlowButton"
 import { Input } from "@/lib/components/ui/Input"
 import { useTranslation } from "@/hooks/useTranslation"
-import { useToast } from "@/lib/components/ui/ToastProvider"
+
 import { Mail, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
@@ -14,7 +37,7 @@ export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("")
   const [loading, setLoading] = useState(false)
   const { language } = useTranslation()
-  const toast = useToast()
+  
 
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault()
