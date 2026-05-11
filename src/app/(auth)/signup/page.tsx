@@ -6,7 +6,7 @@ import  GlassCard  from "@/lib/components/ui/GlassCard"
 import  GlowButton  from "@/lib/components/ui/GlowButton"
 import { Input } from "@/lib/components/ui/Input"
 import { useTranslation } from "@/hooks/useTranslation"
-import { useToast } from "@/lib/components/ui/ToastProvider"
+
 import { Mail, Lock, User } from "lucide-react"
 import Link from "next/link"
 
@@ -18,7 +18,7 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false)
   
   const { language } = useTranslation()
-  const toast = useToast()
+  
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
